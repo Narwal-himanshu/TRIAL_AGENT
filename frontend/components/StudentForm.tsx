@@ -3,11 +3,10 @@
 import { useState } from "react"
 
 interface StudentFormProps {
-  firebaseUid: string
   onSave: (data: any) => void
 }
 
-export default function StudentForm({ firebaseUid, onSave }: StudentFormProps) {
+export default function StudentForm({ onSave }: StudentFormProps) {
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
@@ -30,7 +29,6 @@ export default function StudentForm({ firebaseUid, onSave }: StudentFormProps) {
     setError("")
     try {
       const data = {
-        firebase_uid: firebaseUid,
         name: form.name,
         current_year: form.current_year,
         branch: form.branch,

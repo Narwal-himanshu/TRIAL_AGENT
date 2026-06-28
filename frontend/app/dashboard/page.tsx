@@ -1,9 +1,6 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
-import { auth } from "@/lib/firebase"
-import { useAuthState } from "react-firebase-hooks/auth"
 import {
   getStudentProfile,
   saveStudentProfile,
@@ -15,8 +12,6 @@ import CareerResult from "@/components/CareerResult"
 import ContentFeed from "@/components/ContentFeed"
 
 export default function DashboardPage() {
-  const [user, loading] = useAuthState(auth)
-  const router = useRouter()
   const [profileExists, setProfileExists] = useState(false)
   const [profileLoading, setProfileLoading] = useState(true)
   const [classifying, setClassifying] = useState(false)
@@ -25,18 +20,13 @@ export default function DashboardPage() {
   const [error, setError] = useState("")
 
   useEffect(() => {
-    if (loading) return
-    if (!user) {
-      router.push("/login")
-      return
-    }
-    checkProfile(user.uid)
-  }, [user, loading])
+    checkProfile()
+  }, [])
 
-  const checkProfile = async (uid: string) => {
+  const checkProfile = async () => {
     setProfileLoading(true)
     try {
-      const profile = await getStudentProfile(uid)
+      const profile = await getStudentProfile()
       setProfileExists(!!profile.name)
     } catch {
       setProfileExists(false)
@@ -51,7 +41,7 @@ export default function DashboardPage() {
     setProfileExists(true)
     setClassifying(true)
     try {
-      await classifyLevel(data.firebase_uid)
+      await classifyLevel()
     } catch (err: any) {
       setError("Classification failed: " + err.message)
       setClassifying(false)
@@ -60,7 +50,7 @@ export default function DashboardPage() {
     setClassifying(false)
     setRecommending(true)
     try {
-      const result = await getCareerRecommendation(data.firebase_uid)
+      const result = await getCareerRecommendation()
       setCareer(result)
     } catch (err: any) {
       setError("Recommendation failed: " + err.message)
@@ -70,12 +60,11 @@ export default function DashboardPage() {
   }
 
   const refreshRecommendation = async () => {
-    if (!user) return
     setRecommending(true)
     setError("")
     try {
-      await classifyLevel(user.uid)
-      const result = await getCareerRecommendation(user.uid)
+      await classifyLevel()
+      const result = await getCareerRecommendation()
       setCareer(result)
     } catch (err: any) {
       setError(err.message)
@@ -84,7 +73,7 @@ export default function DashboardPage() {
     }
   }
 
-  if (loading || profileLoading) {
+  if (profileLoading) {
     return (
       <main className="flex flex-1 items-center justify-center">
         <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-900 border-t-transparent" />
@@ -107,7 +96,7 @@ export default function DashboardPage() {
               {profileExists ? "Update Profile" : "Complete Your Profile"}
             </h2>
             {!profileExists ? (
-              <StudentForm firebaseUid={user!.uid} onSave={handleSave} />
+              <StudentForm onSave={handleSave} />
             ) : (
               <button
                 onClick={() => setProfileExists(false)}
@@ -143,7 +132,7 @@ export default function DashboardPage() {
               <h2 className="mb-4 text-lg font-semibold text-gray-900">
                 Curated Content
               </h2>
-              <ContentFeed firebaseUid={user!.uid} />
+              <ContentFeed />
             </div>
           )}
         </div>

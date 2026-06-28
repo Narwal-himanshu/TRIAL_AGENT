@@ -12,15 +12,7 @@ async function fetchAPI(endpoint: string, options: RequestInit = {}) {
   return res.json()
 }
 
-export async function loginWithFirebase(idToken: string) {
-  return fetchAPI("/api/auth/login", {
-    method: "POST",
-    body: JSON.stringify({ id_token: idToken }),
-  })
-}
-
 export async function saveStudentProfile(data: {
-  firebase_uid: string
   name: string
   current_year: string
   branch: string
@@ -36,27 +28,24 @@ export async function saveStudentProfile(data: {
   })
 }
 
-export async function getStudentProfile(firebaseUid: string) {
-  return fetchAPI(`/api/student/profile/${firebaseUid}`)
+export async function getStudentProfile() {
+  return fetchAPI(`/api/student/profile`)
 }
 
-export async function classifyLevel(firebaseUid: string) {
+export async function classifyLevel() {
   return fetchAPI("/api/career/classify", {
     method: "POST",
-    body: JSON.stringify({ firebase_uid: firebaseUid }),
   })
 }
 
-export async function getCareerRecommendation(firebaseUid: string) {
+export async function getCareerRecommendation() {
   return fetchAPI("/api/career/recommend", {
     method: "POST",
-    body: JSON.stringify({ firebase_uid: firebaseUid }),
   })
 }
 
-export async function getContentFeed(firebaseUid: string) {
+export async function getContentFeed() {
   return fetchAPI("/api/content/feed", {
     method: "POST",
-    body: JSON.stringify({ firebase_uid: firebaseUid }),
   })
 }

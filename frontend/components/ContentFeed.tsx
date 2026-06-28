@@ -2,26 +2,21 @@
 
 import { useEffect, useState } from "react"
 
-interface ContentFeedProps {
-  firebaseUid: string
-}
-
-export default function ContentFeed({ firebaseUid }: ContentFeedProps) {
+export default function ContentFeed() {
   const [feed, setFeed] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
 
   useEffect(() => {
-    if (!firebaseUid) return
     fetchFeed()
-  }, [firebaseUid])
+  }, [])
 
   const fetchFeed = async () => {
     setLoading(true)
     setError("")
     try {
       const { getContentFeed } = await import("@/lib/api")
-      const data = await getContentFeed(firebaseUid)
+      const data = await getContentFeed()
       setFeed(data)
     } catch (err: any) {
       setError(err.message)
