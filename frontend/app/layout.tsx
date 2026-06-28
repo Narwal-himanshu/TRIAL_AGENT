@@ -1,34 +1,28 @@
-import type { Metadata } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
-import "./globals.css"
-import Navbar from "@/components/Navbar"
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-})
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-})
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "AI Career Agent",
-  description: "Get personalized career guidance powered by AI",
-}
+  title: "Your AI Career Roadmap",
+  description: "Get a personalized year-by-year career roadmap powered by AI.",
+};
+
+import { CareerProvider } from "@/context/CareerContext";
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
-      <body className="flex min-h-full flex-col">
-        <Navbar />
-        {children}
+    <html lang="en" className={`${inter.className} h-full antialiased`}>
+      <body className="flex min-h-full flex-col bg-white text-slate-900">
+        <CareerProvider>
+          {children}
+        </CareerProvider>
       </body>
     </html>
-  )
+  );
 }
