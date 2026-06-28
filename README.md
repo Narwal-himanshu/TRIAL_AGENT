@@ -2,31 +2,30 @@
 
 An AI-powered backend that generates highly specific, year-by-year career roadmaps using Google's Gemini 2.0 Flash.
 
-## Setup Instructions
-
-1. Navigate to the backend directory:
-   ```bash
-   cd backend
-   ```
-
-2. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. Configure environment variables:
-   ```bash
-   cp .env.example .env
-   ```
-   Open the `.env` file and set your `GEMINI_API_KEY`.
-
-## Running the Application
-
-To start the server, run:
+## Quick start (Docker)
 ```bash
+cp backend/.env.example backend/.env   # fill in your API key
+docker-compose up --build
+```
+- Frontend: [http://localhost:3000](http://localhost:3000)
+- Backend docs: [http://localhost:8000/docs](http://localhost:8000/docs)
+
+## Quick start (local dev)
+
+### Backend
+```bash
+cd backend
+pip install -r requirements.txt
+cp .env.example .env   # fill in your API key
 uvicorn app.main:app --reload
 ```
-The server will start on `http://127.0.0.1:8000`.
+
+### Frontend
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
 ## API Documentation
 
